@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesion</title>
+    <link rel="stylesheet" href="/styles/normalizar.css">
+
+    <link rel="stylesheet" href="/styles/subir_info.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="subir_info.html">Subir Información</a></li>
+            <li><a href="consultar_info.html">Consultar Información</a></li>
+        </ul>
+    </nav>
+    <main>
+    <h2>Registra al alumno</h2>
+    <form id="myForm" action="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="matricula">Matrícula:</label>
+        <input type="text" id="matricula" name="matricula" required>
+
+        <label for="carrera">Carrera:</label>
+        <select id="carrera" name="carrera" required>
+            <option value="Arquitectura">Arquitectura</option>
+            <option value="Administración de empresas">Administración de empresas</option>
+            <option value="Contaduría y finanzas">Contaduría y finanzas</option>
+            <option value="Derecho">Derecho</option>
+            <option value="Diseño gráfico">Diseño gráfico</option>
+            <option value="Nutrición">Nutrición</option>
+            <option value="Pedagogía">Pedagogía</option>
+            <option value="Ingeniería en sistemas computacionales">Ingeniería en sistemas computacionales</option>
+            <option value="Turismo">Turismo</option> 
+            <option value="Turismo">Criminalistica</option>
+            <option value="Turismo">Comercio Internacional</option>
+            <option value="Turismo">Turismo</option> 
+            <option value="Mercadotecnia">Mercadotecnia</option>
+        </select>
+
+        <label for="boletos">Número de boletos:</label>
+        <select id="boletos" name="boletos">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="3">4</option>
+            <option value="3">5</option>
+            <option value="3">6</option>
+            <option value="3">7</option>
+            <option value="3">8</option>
+            <option value="3">9</option>
+            <option value="10">10</option>
+        </select>
+        <div>
+            <label for="fecha_hora">Fecha y hora (opcional):</label>
+            <input type="datetime-local" id="fecha_hora" name="fecha_hora">
+        </div>
+        <button type="submit">Enviar</button>
+    </form>
+    </main>
+    <script>
+        // Aquí puedes agregar JavaScript para validar el formulario o enviar los datos a un servidor
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            // Aquí puedes realizar acciones con los datos del formulario, como enviarlos a un servidor
+            console.log("Los datos del formulario son:", this);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../styles/normalizar.css">
+
+    <link rel="stylesheet" href="../styles/subir_info.css">
+</head>
+<body>
+
+<body>
+    <main>
+    <h2>Consulta de Estudiante</h2>
+    <form action="/php/consultar.php" method="get">
+        <label for="matricula">Matrícula:</label>
+        <input type="text" id="matricula" name="matricula" required>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div id="resultado" style="display: none;">
+        <p>Nombre: <span id="nombre"></span></p>
+        <p>Carrera: <span id="carrera"></span></p>
+        <button id="editar">Editar</button>
+        <button id="eliminar">Eliminar</button>
+    </div>
+    </main>
+    <script>
+        const formulario = document.getElementById('consultaForm');
+        const resultadoDiv = document.getElementById('resultado');
+        const nombreSpan = document.getElementById('nombre');
+        const carreraSpan = document.getElementById('carrera');
+
+        formulario.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const matricula = document.getElementById('matricula').value;
+
+            // Aquí reemplazarías esta parte con una llamada a tu función para buscar en la base de datos
+            // Simulando la obtención de datos desde la base de datos:
+            const estudiante = {
+                nombre: 'Juan Pérez',
+                carrera: 'Ingeniería en Sistemas'
+            };
+
+            // Mostrar los datos en la pantalla
+            nombreSpan.textContent = estudiante.nombre;
+            carreraSpan.textContent = estudiante.carrera;
+
+            resultadoDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

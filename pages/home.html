@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="../styles/normalizar.css">
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Interfaz de inicio de sesión -->
+        <h2>Iniciar sesión</h2>
+        <form id="login-form" action="../php/login.php" method="post">
+            <label for="username">Usuario:</label>
+            <input class="user" type="text" id="username" name="username"  required>
+    
+            <label for="password">Contraseña:</label>
+            <input class="password" type="password" id="password" name="password" autocomplete="off" required>
+    
+            <button type="submit">Ingresar</button>
+        </form>
+        <div class="form-footer">
+            <p>¿No tienes cuenta? <a href="newuser.html">Crear cuenta</a></p>
+        </div>
+    </div>
+    
+</body>
+</html>
