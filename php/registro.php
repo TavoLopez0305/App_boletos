@@ -13,9 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Encriptar la contraseña
-    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-
     // Evaluar si el usuario ya existe
     $consulta_id = "SELECT * FROM usuarios WHERE username = '$username'";
     $resultado = mysqli_query($conexion, $consulta_id);
@@ -23,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($resultado) > 0) {
         echo "El usuario ya existe.";
     } else {
-        // Insertar el nuevo usuario en la base de datos
-        $sql = "INSERT INTO usuarios (username, password) VALUES ('$username', '$passwordHash')";
+        // Insertar el nuevo usuario en la base de datos sin encriptar la contraseña
+        $sql = "INSERT INTO usuarios (username, password) VALUES ('$username', '$password')";
 
         if (mysqli_query($conexion, $sql)) {
             echo "Tu cuenta se ha creado correctamente.";
@@ -36,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                     <title>Iniciar sesión</title>
                     <link rel='stylesheet' href='../styles/normalizar.css'>
-                    <link rel='stylesheet'href='../styles/login.css'>
+                    <link rel='stylesheet' href='../styles/login.css'>
                 </head>
-                        <body>
-                        <main>
-                            <a href='../pages/home.html'> Iniciar sesion </a>
-                        </main>
-                        </body>
+                <body>
+                    <main>
+                        <a href='../pages/home.html'>Iniciar sesión</a>
+                    </main>
+                </body>
                 </html>";
         } else {
             echo "Error al insertar usuario: " . mysqli_error($conexion);

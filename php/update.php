@@ -5,6 +5,7 @@ $username = "root";
 $password = "";
 $dbname = "app_boletos";
 
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar la conexión
@@ -12,23 +13,32 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$json_data = file_get_contents('carreras.json');
+
+// Decodificar el JSON
+$carreras = json_decode($json_data, true);
+
+// Utilizar los datos de las carreras
+foreach ($carreras as $carrera) {
+    echo "ID: " . $carrera['id'] . ", Nombre: " . $carrera['nombre'] . "<br>";
+}
 // Obtener los datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST['nombre'];
     $matricula = $_POST['matricula'];
-    $carrera = $_POST['carrera'];
+    $carrera_id = $_POST['carrera']; // Ahora se recibe el ID directamente
     $boletos = $_POST['boletos'];
-    $fecha_hora = $_POST['fecha_hora']; // Puede ser NULL si no se proporciona
+    $fecha_hora = $_POST['fecha_hora'];
 
     // Insertar datos en la tabla de estudiantes
-    $sql = "INSERT INTO estudiantes (nombre, matricula, carrera_id) 
-            VALUES ('$nombre', '$matricula', (SELECT id FROM carreras WHERE nombre = '$carrera'))";
+    $sql = "INSERT INTO alumnos (nombre, matricula, carrera_id) 
+            VALUES ('$nombre', '$matricula', $carrera_id)";
     if ($conn->query($sql) === TRUE) {
-        $estudiante_id = $conn->insert_id; // Obtener el ID del estudiante recién insertado
+        $matricula = $conn->insert_id; // Obtener el ID del estudiante recién insertado
 
         // Insertar datos en la tabla de boletos
-        $sql = "INSERT INTO boletos (estudiante_id, cantidad, fecha_hora) 
-                VALUES ($estudiante_id, $boletos, '$fecha_hora')";
+        $sql = "INSERT INTO boletos (alumno_id, cantidad, fecha_hora) 
+                VALUES ($matricula, $boletos, '$fecha_hora')";
         if ($conn->query($sql) === TRUE) {
             echo "Datos insertados correctamente";
         } else {

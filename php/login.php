@@ -1,51 +1,44 @@
 <?php
-// Conexión a la base de datos (reemplaza con tus datos)
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "app_boletos";
+include("conexion.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar la conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-
-}
-
-
-// Procesar datos del formulario si se ha enviado
-
+// Procesar datos del formulario solo si se ha enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener datos del formulario y limpiarlos
-    $username = mysqli_real_escape_string($conn, $_POST["username"]);
-    $password = $_POST["password"];
+    // Obtener los datos del formulario y validar
+    $username = $_POST["username"] ?? "";
+    $password = $_POST["password"] ?? "";
 
-    // Consulta preparada para mayor seguridad
-    $sql = "SELECT * FROM usuarios WHERE username=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['password'])) {
-            // Redirigir a subir_info.html
-            header("Location: subir_info.html");
-            exit();
-        } else {
-            echo "Contraseña incorrecta.";
-        }
-    } else {
-        echo "Usuario no encontrado.";
+    // Validar que los campos no estén vacíos
+    if (empty($username) || empty($password)) {
+        echo "Por favor, completa todos los campos.";
+        exit();
     }
 
-    $stmt->close();
+    // Consultar en la base de datos si el usuario existe y la contraseña es correcta
+    $consulta = "SELECT * FROM usuarios WHERE username = '$username' AND password = '$password'";
+    $resultado = mysqli_query($conexion, $consulta);
+
+    if (mysqli_num_rows($resultado) > 0) {
+        echo "Inicio de sesión exitoso.";
+        // Aquí puedes redirigir a una página de bienvenida o dashboard
+        header("Location: ../pages/subir_info.html");
+        exit();
+    } else {
+        echo "Usuario o contraseña incorrectos.";
+    }
 } else {
-    echo "Error al enviar";
+    // Si el formulario no se ha enviado, muestra el formulario de inicio de sesión
+    echo "
+        <form method='POST' action=''>
+            <label for='username'>Usuario:</label>
+            <input type='text' name='username' id='username' required>
+            
+            <label for='password'>Contraseña:</label>
+            <input type='password' name='password' id='password' required>
+            
+            <button type='submit'>Iniciar sesión</button>
+        </form>
+    ";
 }
 
-$conn->close();
+mysqli_close($conexion);
 ?>
-
