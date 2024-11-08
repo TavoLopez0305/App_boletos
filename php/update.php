@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $matricula = $_POST['matricula'];
     $carrera_id = $_POST['carrera']; // Ahora se recibe el ID directamente
     $boletos = $_POST['boletos'];
-    $fecha_hora = $_POST['fecha_hora'];
 
     // Insertar datos en la tabla de estudiantes
     $sql = "INSERT INTO alumnos (nombre, matricula, carrera_id) 
@@ -37,17 +36,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $matricula = $conn->insert_id; // Obtener el ID del estudiante recién insertado
 
         // Insertar datos en la tabla de boletos
-        $sql = "INSERT INTO boletos (alumno_id, cantidad, fecha_hora) 
-                VALUES ($matricula, $boletos, '$fecha_hora')";
+        $sql = "INSERT INTO boletos (numero_personas) 
+                VALUES ( $boletos)";
         if ($conn->query($sql) === TRUE) {
-            echo "Datos insertados correctamente";
+            header("Location: ../pages/confirmacion.html");
+        } else {
+                    echo "Error al insertar datos: " . $conn->error;
+                }
+
         } else {
             echo "Error al insertar boletos: " . $conn->error;
         }
-    } else {
+    } 
+    else {
         echo "Error al insertar estudiante: " . $conn->error;
     }
-}
-
 $conn->close();
 ?>

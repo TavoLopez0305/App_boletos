@@ -15,7 +15,7 @@
 <body>
     <main>
     <h2>Consulta de Estudiante</h2>
-    <form action="/php/consultar.php" method="get">
+    <form action="../php/consultar.php" method="get">
         <label for="matricula">Matrícula:</label>
         <input type="text" id="matricula" name="matricula" required>
         <button type="submit">Buscar</button>
@@ -28,29 +28,36 @@
         <button id="eliminar">Eliminar</button>
     </div>
     </main>
-    <script>
-        const formulario = document.getElementById('consultaForm');
-        const resultadoDiv = document.getElementById('resultado');
-        const nombreSpan = document.getElementById('nombre');
-        const carreraSpan = document.getElementById('carrera');
-
-        formulario.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const matricula = document.getElementById('matricula').value;
-
-            // Aquí reemplazarías esta parte con una llamada a tu función para buscar en la base de datos
-            // Simulando la obtención de datos desde la base de datos:
-            const estudiante = {
-                nombre: 'Juan Pérez',
-                carrera: 'Ingeniería en Sistemas'
-            };
-
-            // Mostrar los datos en la pantalla
-            nombreSpan.textContent = estudiante.nombre;
-            carreraSpan.textContent = estudiante.carrera;
-
-            resultadoDiv.style.display = 'block';
-        });
-    </script>
-</body>
-</html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        </head>
+    <body>
+        <script>
+            async function consultarEstudiante(matricula) {
+                try {
+                    const response = await fetch('../php/consultar.php?matricula=' + matricula);
+                    const data = await response.json();
+    
+                    // Actualizar los elementos HTML con los datos del estudiante
+                    document.getElementById('nombre').textContent = data.nombre;
+                    document.getElementById('carrera').textContent = data.carrera;
+                    document.getElementById('resultado').style.display = 'block';
+                } catch (error) {
+                    console.error('Error al consultar al estudiante:', error);
+                }
+            }
+    
+            // Obtener el elemento del formulario y el botón
+            const form = document.querySelector('form');
+            const button = document.querySelector('button[type="submit"]');
+    
+            // Agregar un event listener al botón para enviar la solicitud
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Evitar el envío del formulario por defecto
+                const matricula = document.getElementById('matricula').value;
+                consultarEstudiante(matricula);
+            });
+        </script>
+    </body>
+    </html>

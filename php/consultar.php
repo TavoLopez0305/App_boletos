@@ -1,43 +1,45 @@
 <?php
-// Conectar a la base de datos (reemplaza con tus credenciales)
-
-$Servidor = "localhost"; //el $ervidor que utilizaremo$, en e$te caso $erá el localho$t
-
-//u$uario
-$usuario = "root";
-
+// Conexión a la base de datos (reemplaza con tus credenciales)
+$servername = "localhost";
+$username = "root";
 $password = "";
-//La contra$eña del u$uario que utilizaremo$
+$dbname = "app_boletos";
 
-$BD = "app_boletos"; //El nombre de la ba$e de dato$
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-$conn = new mysqli($Servidor, $usuario, $password, $BD);
-
-// Verificar conexión
+// Verificar la conexión
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Obtener la matrícula enviada desde el formulario
-$matricula = $_GET['matricula'];
+// Si se ha enviado un formulario
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $matricula = $_GET['matricula'];
 
-// Validar que la matrícula no esté vacía
-if (empty($matricula)) {
-    echo "Por favor, ingresa la matrícula.";
-} else {
     // Consulta a la base de datos
-    $sql = "SELECT * FROM estudiantes WHERE matricula = '$matricula'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM alumnos WHERE matricula = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $matricula);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Si se encuentra un registro, mostrar la información
-        while($row = $result->fetch_assoc()) {
-            echo "Nombre: " . $row["nombre"] . "<br>";
-            echo "Apellido: " . $row["apellido"] . "<br>";
-            // Agregar aquí los demás campos que quieras mostrar
-        }
+        $row = $result->fetch_assoc();
+        // Obtener el nombre de la carrera
+        $sql_carrera = "SELECT nombre FROM carreras WHERE id = ?";
+        $stmt_carrera = $conn->prepare($sql_carrera);
+        $stmt_carrera->bind_param("i", $row['carrera_id']);
+        $stmt_carrera->execute();
+        $result_carrera = $stmt_carrera->get_result();
+        $row_carrera = $result_carrera->fetch_assoc();
+
+        // Mostrar los resultados en formato JSON para que JavaScript pueda manipularlos fácilmente
+        echo json_encode([
+            'nombre' => $row['nombre'],
+            'carrera' => $row_carrera['nombre']
+        ]);
     } else {
-        echo "No se encontró ningún estudiante con esa matrícula.";
+        echo "Estudiante no encontrado";
     }
 }
 
